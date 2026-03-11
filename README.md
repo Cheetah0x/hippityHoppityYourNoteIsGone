@@ -1,6 +1,6 @@
 # Aztec FPC Note-Count Repro
 
-Small integration repro showing that private note fragmentation can change fee+transfer outcomes.
+Something aint right with the private transfer in the setup phase
 
 ## What this demonstrates
 
@@ -16,7 +16,8 @@ Then it executes a transfer that uses `FPCFeePaymentMethod` and prints a side-by
 - receiver final private balance
 - operator final private balance
 
-The key point is that **end-state balances differ by note count** even when total starting balance is the same.
+If we mint one note at the start. Balance is gone
+If we mint 2 notes. All beuno
 
 ## Requirements
 
