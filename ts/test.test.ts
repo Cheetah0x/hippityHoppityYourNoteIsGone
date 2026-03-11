@@ -46,7 +46,7 @@ import { TxReceipt } from "@aztec/aztec.js/tx"
 
 const SANDBOX_URL = "http://localhost:8080"
 const FEE_JUICE_AMOUNT = 1000000000000000000000n // 1e18
-const INITIAL_BALANCE = 100000000000000000000000000000n
+const INITIAL_BALANCE = 1000000000000000000000000n
 const MNEMONIC = "test test test test test test test test test test test junk"
 const L1_RPC_URL = "http://localhost:8545"
 const TRANSFER_AMOUNT = 10000n
