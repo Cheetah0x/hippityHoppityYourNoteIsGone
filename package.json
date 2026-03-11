@@ -1,4 +1,21 @@
 {
   "name": "bug_repro",
-  "packageManager": "yarn@4.5.3"
+  "packageManager": "yarn@4.5.3",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@aztec/accounts": "v4.0.0-devnet.2-patch.1",
+    "@aztec/aztec.js": "v4.0.0-devnet.2-patch.1",
+    "@aztec/ethereum": "v4.0.0-devnet.2-patch.1",
+    "@aztec/foundation": "v4.0.0-devnet.2-patch.1",
+    "@aztec/noir-contracts.js": "v4.0.0-devnet.2-patch.1",
+    "@aztec/stdlib": "v4.0.0-devnet.2-patch.1",
+    "@aztec/wallet-sdk": "v4.0.0-devnet.2-patch.1"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
 }

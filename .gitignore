@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Test output
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Cache
+.cache/
+.turbo/
+.parcel-cache/
+
+# IDE/editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime
+pids/
+*.pid
+*.pid.lock
