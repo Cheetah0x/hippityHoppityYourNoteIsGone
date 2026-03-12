@@ -261,6 +261,83 @@ describe("QuoteFPC Integration Test", () => {
     expect(rows[0].operatorAfter).not.toBe(rows[1].operatorAfter)
   }, 10000000)
 
+  it("2-note transfer exceeding single note value", async () => {
+    // With 2 notes of 500000000000000000000000 each, transfer more than one note's worth
+    // so the app phase must consume both notes (but setup already took one for the fee).
+    const LARGE_TRANSFER = INITIAL_BALANCE / 2n + 1n // just over one note's value
+
+    const tokenContract = await TokenContract.deploy(
+      wallet as unknown as Wallet,
+      deployerAccount.getAddress(),
+      "USDC",
+      "USDC",
+      18n,
+    ).send(deployOptions)
+
+    const tokenAddress = tokenContract.address
+    const share = INITIAL_BALANCE / 2n
+
+    // Mint 2 equal notes
+    for (let i = 0; i < 2; i++) {
+      await tokenContract.methods
+        .mint_to_private(recipientAccount.getAddress(), share)
+        .send(deployOptions)
+    }
+
+    const paymentMethod = new FPCFeePaymentMethod(
+      fpc.address,
+      recipientAccount.getAddress(),
+      tokenAddress,
+      deployerAccount.getAddress(),
+      wallet,
+      GasSettings.default({
+        maxFeesPerGas: await node.getCurrentMinFees(),
+      }),
+    )
+
+    const sendOptions: SendInteractionOptions = {
+      from: recipientAccount.getAddress(),
+      fee: { paymentMethod },
+    }
+
+    const recipientBefore = await tokenContract.methods
+      .balance_of_private(recipientAccount.getAddress())
+      .simulate({ from: recipientAccount.getAddress() })
+
+    let transferSucceeded = false
+    let error = ""
+    try {
+      await tokenContract.methods
+        .transfer(otherAccount.getAddress(), LARGE_TRANSFER)
+        .send(sendOptions)
+      transferSucceeded = true
+    } catch (err) {
+      error = err instanceof Error ? err.message.split("\n")[0] : String(err)
+    }
+
+    const recipientAfter = await tokenContract.methods
+      .balance_of_private(recipientAccount.getAddress())
+      .simulate({ from: recipientAccount.getAddress() })
+    const receiverAfter = await tokenContract.methods
+      .balance_of_private(otherAccount.getAddress())
+      .simulate({ from: otherAccount.getAddress() })
+    const operatorAfter = await tokenContract.methods
+      .balance_of_private(deployerAccount.getAddress())
+      .simulate({ from: deployerAccount.getAddress() })
+
+    console.log("\n=== 2-note transfer exceeding single note value ===")
+    console.log(`Transfer amount: ${LARGE_TRANSFER} (> single note value of ${share})`)
+    console.table([{
+      notesMinted: 2,
+      transferAmount: LARGE_TRANSFER.toString(),
+      transferSucceeded,
+      recipientBefore: recipientBefore.toString(),
+      recipientAfter: recipientAfter.toString(),
+      receiverAfter: receiverAfter.toString(),
+      operatorAfter: operatorAfter.toString(),
+      error,
+    }])
+  }, 10000000)
 
 const sendEmptyTx = async (
   wallet: ObsidionWalletTest,
